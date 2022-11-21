@@ -18,31 +18,29 @@ exports.displaySauceId = (req, res, next) => {
 }
 
 // permet de poster une sauce
-// Capture et enregistre l'image, analyse la sauce transformée en chaîne de caractères et l'enregistre dans la base de données en définissant correctement son imageUrl.
-// Initialise les likes et dislikes de la sauce à 0 et les usersLiked et usersDisliked avec des tableaux vides. Remarquez que le corps de la demande initiale est vide ; lorsque multer est ajouté,
-// il renvoie une chaîne pour le corps de la demande en fonction des données soumises avec le fichier
 exports.createSauce = (req, res, next) => {
     console.log(req.body);
     const sauceObject = JSON.parse(req.body.sauce)
     delete sauceObject._id;
-    delete sauceObject.userId;
+    delete sauceObject.userId; // supprime la ligne userId de la requête
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
 
+        // initialise les likes et dislikes de la sauce à 0, et les usersLiked et usersDisliked avec des tableaux vides
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
-        
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, // capture et enregistre l'image, en générant une url unique à partir du nom du fichier
     })
     console.log(sauceObject);
     console.log("url de l'image: " + req.file.filename);
     console.log(`${req.protocol}://${req.get('host')}/images/${req.file.filename}`);
 
 
-    sauce.save()
+    sauce.save() // enregistre la sauce et ses informations dans la base de données
         .then(() => res.status(201).json({ message: 'Sauce créée !' }))
         .catch(error => res.status(400).json({ error }));
 };
