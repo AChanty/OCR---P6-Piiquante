@@ -7,7 +7,7 @@ const MIME_TYPES = {
 };
 
 // configuration de multer
-const storage = multer.diskStorage({
+const storage = multer.diskStorage({ // configure le chemin et le nom de fichier pour les fichiers entrants
   destination: (req, file, callback) => { // destination  d'enregistrement des fichiers
     callback(null, 'images'); // nom du dossier en 2e argument
   },
@@ -18,4 +18,4 @@ const storage = multer.diskStorage({
   }
 });
 
-module.exports = multer({storage: storage}).single('image');
+module.exports = multer({storage: storage}).single('image'); // la méthode single capture les fichiers de type image, et les enregistre au système de fichiers du serveur à l'aide du storage configuré
