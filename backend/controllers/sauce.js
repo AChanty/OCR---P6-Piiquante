@@ -48,14 +48,14 @@ exports.createSauce = (req, res, next) => {
 
 // permet de supprimer une sauce et son image de la base de données, seulement si celle-ci a été créée par le même utilisateur
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.id })// utlisation de l'id recue en paramètre pour accéder à la sauce correspondante dans la base de données
         .then(sauce => { // vérifie si c'est le propriétaire de la sauce qui demande la suppression
             if (sauce.userId != req.auth.userId) { // si ce n'est pas le bon utilisateur
                 res.status(401).json({ message: 'Action non autorisée' })
             } else { // si c'est le bon utilisateur
-                const filename = sauce.imageUrl.split('/images/')[1]; // récupère le nom du fichier
-                fs.unlink(`images/${filename}`, () => {
-                    Sauce.deleteOne({ _id: req.params.id })
+                const filename = sauce.imageUrl.split('/images/')[1]; // récupère le nom du fichier image
+                fs.unlink(`images/${filename}`, () => { // supprime le fichier image, mise en place du callback à exécuter une fois ce fichier supprimé
+                    Sauce.deleteOne({ _id: req.params.id }) // supprime la sauce de la base de données
                         .then(() => { res.status(200).json({ message: 'Sauce supprimée !' }) })
                         .catch(error => res.status(401).json({ error }));
                 });
