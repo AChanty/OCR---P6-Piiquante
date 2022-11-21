@@ -27,11 +27,32 @@ exports.createUser = (req, res, next) => {
     //     .catch(error => res.status(400).json({ error }));
 };
 
+// exports.connectUser = (req, res, next) => {
+//     console.log(req.body);
+//     // User.findOne({ _id: req.params.id })
+//     User.findOne({ _id: req.params.id }) // retourne un seul User basé sur la valeur qu'on lui passe, pour récupérer un User par son id unique
+//     .then(() => res.status(201).json({ message: 'Connexion réussie !'}))
+//     // .then(user => res.status(200).json(user))
+//     .catch(error => res.status(404).json({ error }));
+// }
+
 exports.connectUser = (req, res, next) => {
-    console.log(req.body);
-    // User.findOne({ _id: req.params.id })
-    User.findOne({ _id: req.params.id }) // retourne un seul User basé sur la valeur qu'on lui passe, pour récupérer un User par son id unique
-    .then(() => res.status(201).json({ message: 'Connexion réussie !'}))
-    // .then(user => res.status(200).json(user))
-    .catch(error => res.status(404).json({ error }));
-}
+    User.findOne({ email: req.body.email })
+        .then(user => {
+            if (!user) { // retourne une erreur si l'utilisateur n'est pas trouvé dans la base de données
+                return res.status(401).json({ message: 'Identifiants incorrects'});
+            }
+            bcrypt.compare(req.body.password, user.password) // si l'utilisateur est trouvé, compare son mod de passe dans la base de données avec celui entré dans le formulaire de connexion
+                .then(valid => {
+                    if (!valid) { // retourne une erreur si le mot de passe n'est pas le bon
+                        return res.status(401).json({ message: 'Identifiants incorrects' });
+                    }
+                    res.status(200).json({ // si le mot de passe est bon, renvoie l'Id de l'utilisateur et un token
+                        userId: user._id,
+                        token: 'TOKEN'
+                    });
+                })
+                .catch(error => res.status(500).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
+ };
