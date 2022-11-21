@@ -1,8 +1,8 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
-
-const mongoose = require('mongoose');
 
 // importe les différents routeurs
 const userRoutes = require('./routes/user')
@@ -27,5 +27,6 @@ app.use((req, res, next) => {
 
 app.use('/api/auth/', userRoutes)
 app.use('/api/sauces/', sauceRoutes)
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 module.exports = app;

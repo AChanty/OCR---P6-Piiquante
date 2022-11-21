@@ -24,23 +24,9 @@ exports.createUser = (req, res, next) => {
     .catch(error => res.status(500).json({ error }))
 
     console.log(req.body);
-    // const user = new User({
-    //     ...req.body
-    // });
-    // user.save()
-    //     .then(() => res.status(201).json({ message: 'Utilisateur enregistré !' }))
-    //     .catch(error => res.status(400).json({ error }));
 };
 
-// exports.connectUser = (req, res, next) => {
-//     console.log(req.body);
-//     // User.findOne({ _id: req.params.id })
-//     User.findOne({ _id: req.params.id }) // retourne un seul User basé sur la valeur qu'on lui passe, pour récupérer un User par son id unique
-//     .then(() => res.status(201).json({ message: 'Connexion réussie !'}))
-//     // .then(user => res.status(200).json(user))
-//     .catch(error => res.status(404).json({ error }));
-// }
-
+// connexion de l'utilisateur
 exports.connectUser = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {

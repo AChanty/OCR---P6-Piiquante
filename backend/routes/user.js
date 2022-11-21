@@ -5,6 +5,10 @@ const router = express.Router();
 // const User = require('../models/user') // fonctionne pour créer un utilisateur en réactivant (1)
 const userCtrl = require('../controllers/user')
 
+router.post('/signup', userCtrl.createUser);
+router.post('/login', userCtrl.connectUser);
+
+
 // création d'un compte via route POST
 // router.post('/signup', (req, res, next) => { // fonctionne pour créer un utilisateur en réactivant (2)
 //     console.log(req.body);
@@ -15,7 +19,6 @@ const userCtrl = require('../controllers/user')
 //         .then(() => res.status(201).json({ message: 'Utilisateur enregistré !' }))
 //         .catch(error => res.status(400).json({ error }));
 // });
-router.post('/signup', userCtrl.createUser);
 
 // connexion à un compte via route POST
 // router.post('/login', (req, res, next) => {
@@ -26,7 +29,6 @@ router.post('/signup', userCtrl.createUser);
 //     // .then(user => res.status(200).json(user))
 //     .catch(error => res.status(404).json({ error }));
 // });
-router.post('/login', userCtrl.connectUser);
 
 // router.get('/api/sauces ', (req, res, next) => {
 //     Sauce.findOne({ _id: req.params.id })
