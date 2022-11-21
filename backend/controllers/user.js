@@ -1,5 +1,10 @@
+// contrôleur qui contient la logique métier pour la route utilisateur
+
 // appelle le package bcrypt qui permet de crypter les données sensibles
 const bcrypt = require('bcrypt')
+
+// appelle le package permettant de créer des tokens
+const jwt = require('jsonwebtoken');
 
 // importe les différents modèles Mongoose dans l'application pour pouvoir les utiliser
 const User = require('../models/user')
@@ -47,9 +52,13 @@ exports.connectUser = (req, res, next) => {
                     if (!valid) { // retourne une erreur si le mot de passe n'est pas le bon
                         return res.status(401).json({ message: 'Identifiants incorrects' });
                     }
-                    res.status(200).json({ // si le mot de passe est bon, renvoie l'Id de l'utilisateur et un token
+                    res.status(200).json({ // si le mot de passe est bon, renvoie l'Id de l'utilisateur et un token encodé
                         userId: user._id,
-                        token: 'TOKEN'
+                        token: jwt.sign( // chiffre le nouveau token
+                            { userId: user._id  }, // données à encoder dans le token
+                            'RANDOM_TOKEN_SECRET', // clé secrète pour l'encodage
+                            { expiresIn: '24h' } // expiration du token au bout de 24h
+                        )
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
