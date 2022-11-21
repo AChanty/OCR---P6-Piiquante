@@ -2,6 +2,7 @@
 
 // importe les différents modèles Mongoose dans l'application pour pouvoir les utiliser
 const Sauce = require('../models/sauce')
+const fs = require('fs');
 
 // renvoie un tableau de toutes les sauces de la base de données
 exports.displaySauces = (req, res, next) => {
@@ -44,3 +45,21 @@ exports.createSauce = (req, res, next) => {
         .then(() => res.status(201).json({ message: 'Sauce créée !' }))
         .catch(error => res.status(400).json({ error }));
 };
+
+// permet de supprimer une sauce et son image de la base de données, seulement si celle-ci a été créée par le même utilisateur
+exports.deleteSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => { // vérifie si c'est le propriétaire de la sauce qui demande la suppression
+            if (sauce.userId != req.auth.userId) { // si ce n'est pas le bon utilisateur
+                res.status(401).json({ message: 'Action non autorisée' })
+            } else { // si c'est le bon utilisateur
+                const filename = sauce.imageUrl.split('/images/')[1]; // récupère le nom du fichier
+                fs.unlink(`images/${filename}`, () => {
+                    Sauce.deleteOne({ _id: req.params.id })
+                        .then(() => { res.status(200).json({ message: 'Sauce supprimée !' }) })
+                        .catch(error => res.status(401).json({ error }));
+                });
+            }
+        })
+        .catch(error => res.status(500).json({ error }));
+}
