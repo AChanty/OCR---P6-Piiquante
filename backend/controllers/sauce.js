@@ -46,7 +46,7 @@ exports.createSauce = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-// permet de supprimer une sauce et son image de la base de données, seulement si celle-ci a été créée par le même utilisateur
+// permet la suppression d'une sauce et son image de la base de données, seulement si celle-ci a été créée par le même utilisateur
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })// utlisation de l'id recue en paramètre pour accéder à la sauce correspondante dans la base de données
         .then(sauce => { // vérifie si c'est le propriétaire de la sauce qui demande la suppression
@@ -63,3 +63,11 @@ exports.deleteSauce = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 }
+
+// permet la modification d'une sauce et son image de la base de données, seulement si celle-ci a été créée par le même utilisateur
+  exports.modifySauce = (req, res, next) => {
+    Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+      .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+      .catch(error => res.status(400).json({ error }));
+      console.log("Sauce modifiée")
+  };

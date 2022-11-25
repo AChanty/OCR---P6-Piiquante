@@ -12,6 +12,7 @@ router.get('/', auth, sauceCtrl.displaySauces); // renvoie un tableau de toutes 
 router.get('/:id', auth, sauceCtrl.displaySauceId); // renvoie la sauce avec l'_id fourni
 router.post('/', auth, multer, sauceCtrl.createSauce); // poste la sauce dans la base de données
 router.delete('/:id', auth, sauceCtrl.deleteSauce); // supprime la sauce avec l'_id fourni
+router.put('/:id', auth, sauceCtrl.modifySauce); // modifie la sauce avec l'_id fourni
 
 
 module.exports = router;
