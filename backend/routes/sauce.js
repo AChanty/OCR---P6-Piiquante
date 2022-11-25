@@ -13,6 +13,7 @@ router.get('/:id', auth, sauceCtrl.displaySauceId); // renvoie la sauce avec l'_
 router.post('/', auth, multer, sauceCtrl.createSauce); // poste la sauce dans la base de données
 router.delete('/:id', auth, sauceCtrl.deleteSauce); // supprime la sauce avec l'_id fourni
 router.put('/:id', auth, sauceCtrl.modifySauce); // modifie la sauce avec l'_id fourni
+router.post('/:id/like', auth, sauceCtrl.likeSauce); // "like" ou "dislike" la sauce avec l'_id fourni
 
 
 module.exports = router;
