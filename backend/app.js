@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config()
 const path = require('path');
 
 const app = express();
@@ -8,7 +9,7 @@ const app = express();
 const userRoutes = require('./routes/user')
 const sauceRoutes = require('./routes/sauce')
 
-mongoose.connect('mongodb+srv://DrJez:admin@cluster0.9i6zon3.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGODB,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
