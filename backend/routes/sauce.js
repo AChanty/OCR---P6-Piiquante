@@ -1,8 +1,7 @@
 const express = require('express');
-// const auth = require('auth')
 const router = express.Router();
 const auth = require('../middleware/auth') // ajout d'authorize pour permettre à un utilisateur d'effectuer une action sur le parcours des sauces
-const multer = require('../middleware/multer-config')
+const multer = require('../middleware/multer-config') // importe la configuration de Multer
 
 // importe les différents modèles Mongoose dans l'application pour pouvoir les utiliser
 const sauceCtrl = require('../controllers/sauce')

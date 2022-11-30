@@ -66,11 +66,38 @@ exports.deleteSauce = (req, res, next) => {
 
 // permet la modification d'une sauce et son image de la base de données, seulement si celle-ci a été créée par le même utilisateur
 exports.modifySauce = (req, res, next) => {
-    Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Sauce modifiée !' }))
-        .catch(error => res.status(400).json({ error }));
-    console.log("Sauce modifiée")
+    Sauce.findOne({ _id: req.params.id })// utlisation de l'id recue en paramètre pour accéder à la sauce correspondante dans la base de données
+        .then(sauce => {
+            if (sauce.userId != req.auth.userId) { // refus de la requête si ce n'est pas le bon utilisateur
+                res.status(401).json({ message: 'Action non autorisée' })
+            } else { // met à jour la sauce si c'est le bon utilisateur
+                Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+                    .then(() => { res.status(200).json({ message: 'Sauce modifiée !' }) })
+                    .catch(error => res.status(401).json({ error }));
+            }
+        })
+        .catch(error => res.status(500).json({ error }));
 };
+// Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+// // .then(() => res.status(200).json({ message: 'Sauce modifiée !' }))
+// // .catch(error => res.status(400).json({ error }));
+// .then(sauce => {
+//     if (sauce.userId == req.auth.userId) { // si c'est le bon utilisateur
+//         res.status(200).json({ message: 'Sauce modifiée !' })
+//         console.log("Sauce modifiée")
+//     } else {
+//         res.status(400).json({ error });
+//         console.log("Sauce PAS modifiée")
+//     }
+// })
+// .catch(error => res.status(500).json({ error }));
+// };
+
+// Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+// .then(() => res.status(200).json({ message: 'Sauce modifiée !' }))
+// .catch(error => res.status(400).json({ error }));
+// console.log("Sauce modifiée")
+// };
 
 // permet l'ajout/retrait de "likes" et de "dislikes" aux différentes sauces, en ne permettant qu'une action de ce type par utilisateur pour chaque sauce, en gardant en mémoire les likes/dislikes d'un utilisateur via [usersLiked] et [usersDisliked]
 exports.likeSauce = (req, res, next) => {

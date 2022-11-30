@@ -13,10 +13,6 @@ const normalizePort = val => {
   return false;
 };
 
-// const server = http.createServer((req, res) => {
-//     res.end('Voilà la réponse du serveur !');
-// });
-
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
