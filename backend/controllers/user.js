@@ -11,25 +11,7 @@ const { body, validationResult } = require('express-validator');
 // importe les différents modèles Mongoose dans l'application pour pouvoir les utiliser
 const User = require('../models/user')
 
-
 require('dotenv').config()
-
-// création d'un nouvel utilisateur
-// exports.createUser = (req, res, next) => {
-//     bcrypt.hash(req.body.password, 10) // hache la donnée password pour la crypter, execute l'algorithme de hachage 10 fois pour créer un certain niveau de sécurité
-//     .then(hash => {
-//         const user = new User({
-//             email: req.body.email,
-//             password: hash
-//         });
-//         user.save() // enregistre l'utilisateur dans la base de données
-//         .then(() => res.status(201).json({ message: 'Utilisateur enregistré !' }))
-//         .catch(error => res.status(400).json({ error }));
-//     })
-//     .catch(error => res.status(500).json({ error }))
-
-//     console.log(req.body);
-// };
 
 // création d'un nouvel utilisateur
 exports.createUser = (req, res, next) => {
