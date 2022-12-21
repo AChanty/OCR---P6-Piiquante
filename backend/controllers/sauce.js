@@ -24,22 +24,19 @@ exports.displaySauceId = (req, res, next) => {
 exports.createSauce = (req, res, next) => {
     const sauceSchema = Joi.object({ // règles mises en place via Joi demandant que chaque champs soit requis et ne soit pas vide
         name: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         manufacturer: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         description: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         mainPepper: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         heat: Joi.number()
+            .min(1)
             .required(),
     })
 
@@ -73,25 +70,21 @@ exports.createSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
     const sauceSchema = Joi.object({ // règles mises en place via Joi demandant que chaque champs soit requis et ne soit pas vide
         name: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         manufacturer: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         description: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         mainPepper: Joi.string()
-            .alphanum()
             .min(1)
             .required(),
         heat: Joi.number()
+            .min(1)
             .required(),
         userId: Joi.string()
-            .alphanum()
             .required(),
     })
 
@@ -142,7 +135,7 @@ exports.likeSauce = (req, res, next) => {
             })
             .then(() => res.status(200).json({ message: 'Sauce likée !' }))
             .catch(error => res.status(400).json({ error }));
-    } else if (like === -1) { // si l'utilisateur retire son "like" de la sauce
+    } else if (like === -1) { // si l'utilisateur "dislike" la sauce
         Sauce.updateOne({ _id: req.params.id },
             {
                 $push: { usersDisliked: req.body.userId }, // push l'id de l'utilisateur ayant "disliké" la sauce dans le tableau des utilisateurs [usersDisliked]

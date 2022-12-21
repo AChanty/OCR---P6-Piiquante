@@ -4,7 +4,7 @@ const path = require('path');
 const helmet = require('helmet');
 require('dotenv').config() // importe les données contenues dans le fichier .env
 
-
+// configuration d'express rate limit
 const rateLimit = require("express-rate-limit");
 const limiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000, // fenêtre de 24 heures (en millisecondes)
@@ -43,6 +43,6 @@ app.use('/api/auth/', userRoutes)
 app.use('/api/sauces/', sauceRoutes)
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
-app.use(limiter); // utilisation de helmet limiter dans toute l'application
+app.use(limiter); // utilisation de express-rate-limit dans toute l'application
 
 module.exports = app;

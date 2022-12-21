@@ -50,7 +50,6 @@ exports.connectUser = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign( // chiffre le nouveau token
                             { userId: user._id  }, // données à encoder dans le token
-                            // 'RANDOM_TOKEN_SECRET', // clé secrète pour l'encodage
                             process.env.TOKEN, // clé secrète pour l'encodage
                             { expiresIn: '24h' } // expiration du token au bout de 24h
                         )
